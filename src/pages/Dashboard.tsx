@@ -1,12 +1,10 @@
 
 import React, { useState } from 'react';
-import { Camera, Upload } from 'lucide-react';
 import DocumentFilters from '@/components/DocumentFilters';
 import DocumentTable from '@/components/DocumentTable';
 import DocumentScanner from '@/components/DocumentScanner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Receipt, FileText, CreditCard, TrendingUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -94,38 +92,6 @@ const Dashboard = () => {
             Dashboard
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">Welcome back! Here's what's happening with your documents.</p>
-        </div>
-        
-        {/* Quick Action Buttons */}
-        <div className="flex gap-3">
-          <Button
-            onClick={() => setShowScanner(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-          >
-            <Camera className="h-4 w-4" />
-            Scan Document
-          </Button>
-          
-          <Button
-            onClick={() => document.getElementById('file-upload-dashboard')?.click()}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-          >
-            <Upload className="h-4 w-4" />
-            Upload Document
-          </Button>
-          
-          <input
-            id="file-upload-dashboard"
-            type="file"
-            accept="image/*,.pdf"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                handleDocumentCaptured(file);
-              }
-            }}
-            className="hidden"
-          />
         </div>
       </div>
 
