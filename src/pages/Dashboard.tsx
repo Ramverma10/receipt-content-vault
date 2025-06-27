@@ -1,12 +1,16 @@
 
 import React, { useState } from 'react';
+import { Camera, Upload } from 'lucide-react';
 import DocumentFilters from '@/components/DocumentFilters';
 import DocumentTable from '@/components/DocumentTable';
+import DocumentScanner from '@/components/DocumentScanner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Receipt, FileText, CreditCard, TrendingUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showScanner, setShowScanner] = useState(false);
 
   // Sample data
   const documents = [
@@ -69,7 +73,13 @@ const Dashboard = () => {
   ];
 
   const handleAddDocument = () => {
-    console.log('Add document clicked');
+    setShowScanner(true);
+  };
+
+  const handleDocumentCaptured = (file: File) => {
+    console.log('Document captured:', file.name);
+    setShowScanner(false);
+    // Here you would typically upload the file or process it further
   };
 
   const handleViewDocument = (id: string) => {
@@ -78,12 +88,44 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
         <div className="animate-fade-in">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-800 via-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-slate-200 dark:via-blue-400 dark:to-purple-400">
             Dashboard
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mt-2">Welcome back! Here's what's happening with your documents.</p>
+        </div>
+        
+        {/* Quick Action Buttons */}
+        <div className="flex gap-3">
+          <Button
+            onClick={() => setShowScanner(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <Camera className="h-4 w-4" />
+            Scan Document
+          </Button>
+          
+          <Button
+            onClick={() => document.getElementById('file-upload-dashboard')?.click()}
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          >
+            <Upload className="h-4 w-4" />
+            Upload Document
+          </Button>
+          
+          <input
+            id="file-upload-dashboard"
+            type="file"
+            accept="image/*,.pdf"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                handleDocumentCaptured(file);
+              }
+            }}
+            className="hidden"
+          />
         </div>
       </div>
 
@@ -125,6 +167,12 @@ const Dashboard = () => {
       <DocumentTable
         documents={filteredDocuments}
         onViewDocument={handleViewDocument}
+      />
+
+      <DocumentScanner
+        isOpen={showScanner}
+        onClose={() => setShowScanner(false)}
+        onDocumentCaptured={handleDocumentCaptured}
       />
     </div>
   );
